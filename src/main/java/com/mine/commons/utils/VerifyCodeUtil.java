@@ -10,8 +10,8 @@ import java.util.Random;
 public class VerifyCodeUtil
 {
     public static final String CHECK_CODE_KEY = "check_code";
-    public static final int WIDTH = 64;
-    public static final int HEIGHT = 20;
+    public static final int WIDTH = 96;
+    public static final int HEIGHT = 28;
     
     public static Color codeFontColors[]=new Color[]{Color.BLACK,Color.BLUE};
     public static Color backgroudColors[]=new Color[]{
@@ -69,12 +69,12 @@ public class VerifyCodeUtil
     public static void drawRands(Graphics g, char[] rands)
     {
         g.setColor(codeFontColors[new Random().nextInt(codeFontColors.length)]);
-        g.setFont(new Font(null, Font.HANGING_BASELINE | Font.BOLD , 18));
+        g.setFont(new Font(null, Font.ITALIC  , 32));
         //在不同的高度上输出验证码的每个字符 
-        g.drawString("" + rands[0], new Random().nextInt(5)+1, new Random().nextInt(12)+10);
-        g.drawString("" + rands[1], new Random().nextInt(10)+10, new Random().nextInt(12)+10);
-        g.drawString("" + rands[2], new Random().nextInt(15)+25, new Random().nextInt(12)+10);
-        g.drawString("" + rands[3], new Random().nextInt(20)+35, new Random().nextInt(12)+10);
+        g.drawString("" + rands[0], new Random().nextInt(5)+10, new Random().nextInt(12)+25);
+        g.drawString("" + rands[1], new Random().nextInt(10)+25, new Random().nextInt(12)+15);
+        g.drawString("" + rands[2], new Random().nextInt(15)+45, new Random().nextInt(12)+20);
+        g.drawString("" + rands[3], new Random().nextInt(20)+55, new Random().nextInt(12)+20);
         //System.out.println(rands);
     }
 
@@ -98,7 +98,7 @@ public class VerifyCodeUtil
             int green = (int) (Math.random() * 255);
             int blue = (int) (Math.random() * 255);
             g.setColor(new Color(red, green, blue));
-            g.drawOval(x, y, new Random().nextInt(5)+1, 0);
+            g.drawOval(x, y, new Random().nextInt(5)+10, 0);
         }
         //画4条直线
         for (int i = 0; i < 4; i++)
@@ -107,8 +107,18 @@ public class VerifyCodeUtil
             int green = (int) (Math.random() * 255);
             int blue = (int) (Math.random() * 255);
             g.setColor(new Color(red, green, blue));
-            
-            g.drawLine((int) (Math.random() * WIDTH), (int) (Math.random() * HEIGHT), (int) (Math.random() * WIDTH), (int) (Math.random() * HEIGHT));
+            int x1=(int) (Math.random() * WIDTH);
+            int x2=(int) (Math.random() * HEIGHT);
+            int y1=(int) (Math.random() * WIDTH);
+            int y2=(int) (Math.random() * HEIGHT);
+            g.drawLine(x1+1,x2+1 ,y1+1 , y2+1);
+            g.drawLine(x1,x2 ,y1 , y2);
+            g.drawLine(x1-1,x2-1 ,y1-1 , y2-1);
+            g.drawLine(x1-2,x2-2 ,y1-2, y2-3);
+            g.drawLine(x1-3,x2-3 ,y1-3 , y2-2);
+            g.drawLine(x1-4,x2-4 ,y1-4 , y2-4);
+            g.drawLine(x1-5,x2-5 ,y1-5 , y2-5);
+            g.drawLine(x1-6,x2-6 ,y1-6 , y2-6);
         }
     }
 }
