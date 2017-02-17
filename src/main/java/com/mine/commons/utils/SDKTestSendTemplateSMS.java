@@ -1,4 +1,4 @@
-package com.cloopen.rest.utils;
+package com.mine.commons.utils;
 
 import java.util.HashMap;
 

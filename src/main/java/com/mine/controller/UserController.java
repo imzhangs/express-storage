@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cloopen.rest.utils.SDKTestSendTemplateSMS;
-import com.cloopen.rest.utils.VerifyCodeUtil;
 import com.kd.commons.result.BaseResult;
 import com.kd.commons.result.ModelResult;
 import com.mine.commons.consts.CachePrefixConsts;
+import com.mine.commons.utils.SDKTestSendTemplateSMS;
+import com.mine.commons.utils.VerifyCodeUtil;
 
 import redis.clients.jedis.Jedis;
 
