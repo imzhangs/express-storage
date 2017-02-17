@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mine.mapper.UserAddressMapper">
+
+
+	<insert id="insertUserAddress">
+		insert into user_address(mobile,address,ip)
+		values(#{mobile},#{address},#{ip})
+		on duplicate key update 
+		address=values(address)
+		,ip=values(ip)
+		,update_time=values(update_time)
+	</insert>
+
+	<select id="queryUserAddress" resultType="com.mine.domain.UserAddress">
+		select * from user_address limit ${offset},${limit}
+	</select>
+
+</mapper>
