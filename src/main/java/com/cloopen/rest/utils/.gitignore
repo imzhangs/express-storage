@@ -1,0 +1,13 @@
+/QuerySMSTemplate.java
+/SDKTestBillRecords.java
+/SDKTestCallResult.java
+/SDKTestCreateSubAccount.java
+/SDKTestGetSubAccounts.java
+/SDKTestIvrDial.java
+/SDKTestLandingCall.java
+/SDKTestMediaFileUpload.java
+/SDKTestQueryCallState.java
+/SDKTestQuerySubAccount.java
+/SDKTestQuerytAccountInfo.java
+/SDKTestSendTemplateSMS.java
+/SDKTestVoiceVerify.java
