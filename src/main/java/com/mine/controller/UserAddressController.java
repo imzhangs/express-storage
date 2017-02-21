@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.kd.commons.result.ModelResult;
+import com.kd.commons.result.ResponseSet;
 import com.mine.commons.consts.CachePrefixConsts;
 import com.mine.domain.UserAddress;
 import com.mine.service.UserAddressService;
@@ -26,22 +27,25 @@ public class UserAddressController {
 	UserAddressService userAddressService;
 
 	@RequestMapping("/save")
-	public ModelResult<String> saveAddress(UserAddress address, String smsCode, Boolean isTest,HttpServletRequest request) {
+	public ResponseSet saveAddress(UserAddress address, String smsCode, Boolean isTest,HttpServletRequest request) {
 		ModelResult<String> result = new ModelResult<>();
 		if (address == null) {
-			result.paramError("参数错误");
-			return result;
+			return result.paramError("参数错误");
 		}
 
 		if (StringUtils.isBlank(address.mobile) || !address.mobile.matches("^1[3-8]{1}[\\d]{9}$")) {
-			result.paramError("手机号码错误");
+			return result.paramError("手机号码错误");
+		}
+		
+		if (StringUtils.isBlank(smsCode) ) {
+			result.paramError("验证码错误");
 			return result;
 		}
-
+		
 		if (isTest == null || !isTest) {
 			String getSmsCode = jedis.get(CachePrefixConsts.SMS_CODE_PREFIX + address.mobile);
-			if (!getSmsCode.equalsIgnoreCase(smsCode)) {
-				result.paramError("短信验证码错误");
+			if (StringUtils.isBlank(getSmsCode) || !getSmsCode.equalsIgnoreCase(smsCode)) {
+				return result.paramError("短信验证码错误");
 			}
 		}
 		

@@ -69,12 +69,12 @@ public class VerifyCodeUtil
     public static void drawRands(Graphics g, char[] rands)
     {
         g.setColor(codeFontColors[new Random().nextInt(codeFontColors.length)]);
-        g.setFont(new Font(null, Font.ITALIC  , 32));
+        g.setFont(new Font(null, Font.ITALIC  , 28));
         //在不同的高度上输出验证码的每个字符 
-        g.drawString("" + rands[0], new Random().nextInt(5)+10, new Random().nextInt(12)+25);
+        g.drawString("" + rands[0], new Random().nextInt(5)+10, new Random().nextInt(12)+15);
         g.drawString("" + rands[1], new Random().nextInt(10)+25, new Random().nextInt(12)+15);
-        g.drawString("" + rands[2], new Random().nextInt(15)+45, new Random().nextInt(12)+20);
-        g.drawString("" + rands[3], new Random().nextInt(20)+55, new Random().nextInt(12)+20);
+        g.drawString("" + rands[2], new Random().nextInt(15)+45, new Random().nextInt(12)+15);
+        g.drawString("" + rands[3], new Random().nextInt(20)+55, new Random().nextInt(12)+15);
         //System.out.println(rands);
     }
 
@@ -98,7 +98,7 @@ public class VerifyCodeUtil
             int green = (int) (Math.random() * 255);
             int blue = (int) (Math.random() * 255);
             g.setColor(new Color(red, green, blue));
-            g.drawOval(x, y, new Random().nextInt(5)+10, 0);
+            g.drawOval(x, y, new Random().nextInt(5)+6, 0);
         }
         //画4条直线
         for (int i = 0; i < 4; i++)

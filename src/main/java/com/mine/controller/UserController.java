@@ -44,35 +44,37 @@ public class UserController {
 			return result;
 		}
 		
-		Object imgVerifyCode=request.getSession().getAttribute(CachePrefixConsts.VERIFY_CODE_PREFIX + request.getSession().getId());
-		
-		if(isTest==null || !isTest){
-			
-			if(StringUtils.isBlank(imgCode) || !imgVerifyCode.toString().equalsIgnoreCase(imgCode)){
-				result.paramError("图形码错误");
-				return result;
-			}
-		}
-		
+//		Object imgVerifyCode=request.getSession().getAttribute(CachePrefixConsts.VERIFY_CODE_PREFIX + request.getSession().getId());
+//		
+//		if(isTest==null || !isTest){
+//			
+//			if(StringUtils.isBlank(imgCode) || !imgVerifyCode.toString().equalsIgnoreCase(imgCode)){
+//				result.paramError("图形码错误");
+//				return result;
+//			}
+//		}
+		boolean isSent =false;
 
 		String code = jedis.get(CachePrefixConsts.SMS_CODE_PREFIX + mobile);
 		if (StringUtils.isBlank(code)) {
 			code = RandomUtils.nextInt(1000, 9999) + "";
 			jedis.setex(CachePrefixConsts.SMS_CODE_PREFIX + mobile, 300, code);
-			String count = jedis.get(mobile);
-			int i = 0;
-			try {
-				i = StringUtils.isBlank(count) ? 1 : Integer.valueOf(count) + 1;
-			} catch (Throwable e) {
-				i = 1;
-			}
-			if (i > 10) {
-				jedis.setex(CachePrefixConsts.SMS_CODE_PREFIX + mobile, 600, code);
-			}
-			jedis.setex(mobile, 3600, i + "");
 		}
 
-		boolean isSent = this.smsTemplate.send(mobile, code);
+		String count = jedis.get(mobile);
+		int i = 0;
+		try {
+			i = StringUtils.isBlank(count) ? 1 : Integer.valueOf(count) + 1;
+		} catch (Throwable e) {
+			i = 1;
+		}
+		if (i > 10) {
+			jedis.setex(CachePrefixConsts.SMS_CODE_PREFIX + mobile, 600, code);
+		}else{
+			isSent = this.smsTemplate.send(mobile, code);
+		}
+		
+		jedis.setex(mobile, 3600, i + "");
 
 		if (isSent) {
 			result.data = "sent OK";
@@ -119,10 +121,27 @@ public class UserController {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		} finally {
-			request.getSession().setAttribute(CachePrefixConsts.VERIFY_CODE_PREFIX + request.getSession().getId(),
-					new String(code));
+			String verifyCodeKey=CachePrefixConsts.VERIFY_CODE_PREFIX + request.getSession().getId();
+			request.getSession().setAttribute(verifyCodeKey,new String(code));
+			Object getImgCode=request.getSession().getAttribute(verifyCodeKey );
+			System.out.println(getImgCode);
 		}
 		return null;
 	}
-
+	
+	@RequestMapping("/checkImageCode")
+	public ModelResult<String> checkVerifyImgeCode(String imgCode,HttpServletResponse response,HttpServletRequest request){
+		// 指定允许其他域名访问  
+		response.setHeader("Access-Control-Allow-Origin","*");  
+		ModelResult<String> result = new ModelResult<String>();
+		String verifyCodeKey=CachePrefixConsts.VERIFY_CODE_PREFIX + request.getSession().getId();
+		Object getImgCode=request.getSession().getAttribute(verifyCodeKey );
+		if(null==getImgCode || !imgCode.equalsIgnoreCase(getImgCode.toString())){
+			result.paramError("图形验证码错误");
+		}else{
+			result.ok();
+			//request.getSession().removeAttribute(verifyCodeKey);
+		}
+		return result;
+	}
 }
